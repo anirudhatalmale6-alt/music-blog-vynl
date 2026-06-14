@@ -3,308 +3,459 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VYNL — Music Blog & Tracks</title>
-<meta name="description" content="VYNL — where words meet waveforms. A music blog featuring original tracks, lyrics, and stories from the underground.">
+<title>SoundWave Blog — Where Music Meets Words</title>
+<meta name="description" content="SoundWave Blog — your home for original music, lyrics, and stories. Listen, read, and discover.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg-deep:#050505;--bg-primary:#0a0a0a;--bg-elevated:#111;--bg-card:#161616;--bg-hover:#1c1c1c;
-  --accent:#8b5cf6;--accent-dim:#6d3fd4;--accent-glow:rgba(139,92,246,.15);--accent-bright:#a78bfa;
-  --text-primary:#f0eded;--text-secondary:#8a8a8a;--text-muted:#555;
-  --border:#1e1e1e;--border-accent:rgba(139,92,246,.25);
-  --radius:12px;--radius-sm:8px;--radius-lg:20px;
-  --font-display:'Instrument Serif',Georgia,serif;
-  --font-body:'DM Sans',system-ui,sans-serif;
-  --font-mono:'JetBrains Mono',monospace;
-  --ease:cubic-bezier(.22,1,.36,1);
+  --bg-dark:#1a1a2e;--bg-darker:#12122a;--bg-section:#0f0f23;--bg-card:#1e1e3a;--bg-card-hover:#252550;
+  --accent:#f0c040;--accent-hover:#e0b030;--accent-dim:rgba(240,192,64,.15);
+  --blue:#3a86d4;--blue-dim:rgba(58,134,212,.2);
+  --text-white:#f5f5f5;--text-light:#c8c8d8;--text-muted:#7a7a9a;
+  --border:rgba(255,255,255,.08);
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'Source Sans 3',system-ui,sans-serif;
+  --font-mono:'Fira Code',monospace;
+  --radius:10px;
+  --ease:cubic-bezier(.25,.8,.25,1);
 }
-html{scroll-behavior:smooth;background:var(--bg-deep);scrollbar-width:thin;scrollbar-color:var(--accent-dim) var(--bg-primary)}
-body{font-family:var(--font-body);color:var(--text-primary);background:var(--bg-primary);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-bottom:90px}
+html{scroll-behavior:smooth;background:var(--bg-darker)}
+body{font-family:var(--font-body);color:var(--text-white);background:var(--bg-dark);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:var(--bg-dark)}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
 
-::selection{background:var(--accent);color:#fff}
-
-/* === GRAIN OVERLAY === */
-body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* === TOPBAR === */
+.topbar{background:var(--bg-darker);padding:8px clamp(1rem,4vw,3rem);display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--text-muted);border-bottom:1px solid var(--border)}
+.topbar-socials{display:flex;gap:1rem}
+.topbar-socials a{color:var(--text-muted);transition:color .3s}
+.topbar-socials a:hover{color:var(--accent)}
 
 /* === NAV === */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(1rem,4vw,3rem);height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,5,.85);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid transparent;transition:border-color .4s}
-nav.scrolled{border-color:var(--border)}
-.nav-logo{font-family:var(--font-display);font-size:1.6rem;letter-spacing:-.02em;color:var(--text-primary);text-decoration:none;display:flex;align-items:center;gap:.5rem}
-.nav-logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;animation:pulse-dot 2s ease infinite}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
-.nav-links{display:flex;gap:2rem;align-items:center}
-.nav-links a{font-size:.82rem;font-weight:500;color:var(--text-secondary);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;position:relative;transition:color .3s}
-.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--accent);transition:width .3s var(--ease)}
-.nav-links a:hover{color:var(--text-primary)}
-.nav-links a:hover::after,.nav-links a.active::after{width:100%}
-.nav-links a.active{color:var(--accent-bright)}
+nav{position:sticky;top:0;z-index:100;background:rgba(18,18,42,.95);backdrop-filter:blur(16px);padding:0 clamp(1rem,4vw,3rem);display:flex;align-items:center;justify-content:space-between;height:70px;border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--font-display);font-size:1.7rem;font-weight:700;color:var(--text-white);display:flex;align-items:center;gap:.5rem}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:.3rem;align-items:center}
+.nav-links a{padding:8px 18px;font-size:.88rem;font-weight:500;color:var(--text-light);border-radius:6px;transition:all .3s}
+.nav-links a:hover,.nav-links a.active{color:var(--accent);background:var(--accent-dim)}
+.mobile-toggle{display:none;background:none;border:none;color:var(--text-white);cursor:pointer;font-size:1.5rem;padding:8px}
 
-.mobile-toggle{display:none;background:none;border:none;color:var(--text-primary);cursor:pointer;padding:8px}
-.mobile-toggle svg{width:22px;height:22px}
-.mobile-menu{display:none;position:fixed;inset:0;z-index:99;background:rgba(5,5,5,.97);backdrop-filter:blur(30px);flex-direction:column;align-items:center;justify-content:center;gap:2rem}
+.mobile-menu{display:none;position:fixed;inset:0;z-index:200;background:rgba(15,15,35,.98);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
 .mobile-menu.open{display:flex}
-.mobile-menu a{font-family:var(--font-display);font-size:2.5rem;color:var(--text-primary);text-decoration:none;opacity:0;transform:translateY(20px);transition:all .5s var(--ease)}
-.mobile-menu.open a{opacity:1;transform:translateY(0)}
-.mobile-menu a:nth-child(2){transition-delay:.1s}
-.mobile-menu a:nth-child(3){transition-delay:.2s}
-.mobile-menu a:nth-child(4){transition-delay:.3s}
-.mobile-close{position:absolute;top:1.2rem;right:1.5rem;background:none;border:none;color:var(--text-primary);font-size:2rem;cursor:pointer}
+.mobile-menu a{font-family:var(--font-display);font-size:1.8rem;color:var(--text-white);padding:10px 30px;border-radius:8px;transition:all .3s}
+.mobile-menu a:hover{color:var(--accent);background:var(--accent-dim)}
+.mobile-close{position:absolute;top:1.2rem;right:1.5rem;background:none;border:none;color:var(--text-white);font-size:2rem;cursor:pointer}
 
 @media(max-width:768px){
   .nav-links{display:none}
   .mobile-toggle{display:block}
+  .topbar{display:none}
 }
 
 /* === HERO === */
-.hero{min-height:90vh;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(1.5rem,5vw,4rem);padding-top:100px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--accent-glow),transparent 70%);filter:blur(80px);pointer-events:none;animation:hero-glow 8s ease-in-out infinite alternate}
-@keyframes hero-glow{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-60px,40px) scale(1.2)}}
-.hero-label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-bright);margin-bottom:1.5rem;display:flex;align-items:center;gap:.7rem}
-.hero-label::before{content:'';width:30px;height:1px;background:var(--accent)}
-.hero h1{font-family:var(--font-display);font-size:clamp(3rem,8vw,7rem);line-height:.95;letter-spacing:-.03em;max-width:900px;margin-bottom:1.5rem}
-.hero h1 em{font-style:italic;color:var(--accent-bright)}
-.hero-sub{font-size:clamp(.95rem,1.5vw,1.15rem);color:var(--text-secondary);max-width:500px;line-height:1.7;font-weight:300}
-.hero-scroll{margin-top:3rem;display:flex;align-items:center;gap:.8rem;color:var(--text-muted);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-family:var(--font-mono)}
-.hero-scroll .arrow{width:1px;height:40px;background:linear-gradient(to bottom,var(--accent),transparent);position:relative;animation:scroll-arrow 2s ease infinite}
-@keyframes scroll-arrow{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.3;transform:scaleY(.5)}}
+.hero{position:relative;min-height:85vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0d0d2b 0%,#1a0a2e 30%,#2d1b4e 60%,#1a1a2e 100%);z-index:0}
+.hero-bg::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cdefs%3E%3CradialGradient id='a' cx='300' cy='300' r='300'%3E%3Cstop offset='0' stop-color='%23f0c040' stop-opacity='.06'/%3E%3Cstop offset='1' stop-color='%23f0c040' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='300' cy='300' r='300' fill='url(%23a)'/%3E%3C/svg%3E") center/cover no-repeat;animation:hero-pulse 6s ease-in-out infinite alternate}
+@keyframes hero-pulse{0%{opacity:.4;transform:scale(1)}100%{opacity:.8;transform:scale(1.15)}}
+.hero-bg::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E")}
+.hero-visual{position:absolute;inset:0;z-index:1;overflow:hidden;display:flex;align-items:center;justify-content:center;opacity:.12}
+.hero-visual .eq-bar{width:6px;margin:0 3px;background:var(--accent);border-radius:3px;animation:eq 1.2s ease-in-out infinite alternate}
+.hero-visual .eq-bar:nth-child(1){height:60px;animation-delay:0s}
+.hero-visual .eq-bar:nth-child(2){height:100px;animation-delay:.15s}
+.hero-visual .eq-bar:nth-child(3){height:140px;animation-delay:.3s}
+.hero-visual .eq-bar:nth-child(4){height:80px;animation-delay:.45s}
+.hero-visual .eq-bar:nth-child(5){height:120px;animation-delay:.6s}
+.hero-visual .eq-bar:nth-child(6){height:160px;animation-delay:.75s}
+.hero-visual .eq-bar:nth-child(7){height:90px;animation-delay:.9s}
+.hero-visual .eq-bar:nth-child(8){height:130px;animation-delay:1.05s}
+.hero-visual .eq-bar:nth-child(9){height:70px;animation-delay:.2s}
+.hero-visual .eq-bar:nth-child(10){height:110px;animation-delay:.5s}
+.hero-visual .eq-bar:nth-child(11){height:150px;animation-delay:.7s}
+.hero-visual .eq-bar:nth-child(12){height:85px;animation-delay:.85s}
+@keyframes eq{0%{transform:scaleY(.3)}100%{transform:scaleY(1)}}
+.hero-content{position:relative;z-index:2;max-width:800px}
+.hero-tagline{font-family:var(--font-display);font-style:italic;font-size:clamp(1rem,2vw,1.3rem);color:var(--accent);margin-bottom:1rem;letter-spacing:.02em}
+.hero h1{font-family:var(--font-display);font-size:clamp(2.5rem,6vw,4.5rem);font-weight:700;line-height:1.1;margin-bottom:1.2rem}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero-desc{font-size:clamp(.95rem,1.5vw,1.15rem);color:var(--text-light);max-width:600px;margin:0 auto 2rem;line-height:1.7;font-weight:300}
+.hero-cta{display:inline-block;background:var(--accent);color:var(--bg-dark);padding:14px 36px;border-radius:6px;font-weight:700;font-size:.92rem;letter-spacing:.04em;text-transform:uppercase;transition:all .3s var(--ease);border:2px solid var(--accent)}
+.hero-cta:hover{background:transparent;color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,192,64,.2)}
 
-/* === SECTIONS === */
-.section{padding:clamp(3rem,8vw,6rem) clamp(1.5rem,4vw,3rem)}
-.section-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:clamp(2rem,4vw,3rem);flex-wrap:wrap;gap:1rem}
-.section-title{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.5rem);letter-spacing:-.02em}
-.section-title em{font-style:italic;color:var(--accent-bright)}
-.section-link{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-bright);text-decoration:none;font-family:var(--font-mono);display:flex;align-items:center;gap:.5rem;transition:gap .3s var(--ease)}
-.section-link:hover{gap:.8rem}
-.section-link svg{width:14px;height:14px}
+/* === WAVE DIVIDER === */
+.wave-divider{position:relative;height:80px;overflow:hidden;margin-top:-1px}
+.wave-divider svg{position:absolute;bottom:0;width:100%;height:100%}
+.wave-blue{fill:var(--blue)}
+.wave-accent{fill:var(--accent)}
+.wave-dark{fill:var(--bg-section)}
+.wave-divider-reverse{transform:rotate(180deg)}
 
-.page-section{display:none;min-height:calc(100vh - 64px);padding-top:80px}
-.page-section.active{display:block}
+/* === SECTION STYLES === */
+.section{padding:clamp(3rem,6vw,5rem) clamp(1rem,4vw,3rem)}
+.section-dark{background:var(--bg-section)}
+.section-label{font-family:var(--font-body);font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:.6rem}
+.section-title{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:.8rem;line-height:1.15}
+.section-desc{font-size:1rem;color:var(--text-light);max-width:600px;line-height:1.7;font-weight:300}
+.section-header{margin-bottom:clamp(2rem,4vw,3rem)}
+.section-center{text-align:center}
+.section-center .section-desc{margin-left:auto;margin-right:auto}
 
-/* === BLOG CARDS === */
-.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:1.5rem}
-.blog-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .4s var(--ease);position:relative}
-.blog-card:hover{border-color:var(--border-accent);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4)}
-.blog-card-img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;transition:transform .6s var(--ease)}
-.blog-card:hover .blog-card-img{transform:scale(1.05)}
-.blog-card-img-wrap{overflow:hidden;position:relative}
-.blog-card-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.4),transparent 50%)}
-.blog-card-body{padding:1.5rem}
-.blog-card-meta{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;flex-wrap:wrap}
-.blog-tag{font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;font-weight:500;font-family:var(--font-mono)}
-.blog-tag.cat{background:var(--accent-glow);color:var(--accent-bright);border:1px solid var(--border-accent)}
-.blog-tag.tag{background:var(--bg-hover);color:var(--text-secondary);border:1px solid var(--border)}
-.blog-card-date{font-size:.72rem;color:var(--text-muted);font-family:var(--font-mono);margin-left:auto}
-.blog-card h3{font-family:var(--font-display);font-size:1.35rem;line-height:1.25;margin-bottom:.6rem;letter-spacing:-.01em;transition:color .3s}
-.blog-card:hover h3{color:var(--accent-bright)}
-.blog-card p{font-size:.88rem;color:var(--text-secondary);line-height:1.6;font-weight:300}
-.blog-card-read{display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;font-size:.75rem;color:var(--accent-bright);letter-spacing:.05em;text-transform:uppercase;font-family:var(--font-mono);transition:gap .3s}
-.blog-card:hover .blog-card-read{gap:.7rem}
-
-/* === FILTERS === */
-.filter-bar{display:flex;gap:.6rem;margin-bottom:2rem;flex-wrap:wrap}
-.filter-btn{background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary);padding:8px 18px;border-radius:100px;font-size:.75rem;letter-spacing:.05em;cursor:pointer;font-family:var(--font-body);font-weight:500;transition:all .3s}
-.filter-btn:hover,.filter-btn.active{background:var(--accent-glow);color:var(--accent-bright);border-color:var(--border-accent)}
-
-/* === MUSIC TRACKS === */
-.tracks-grid{display:grid;grid-template-columns:1fr;gap:1rem}
-.track-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .4s var(--ease)}
-.track-card:hover{border-color:var(--border-accent)}
-.track-card.playing{border-color:var(--accent);box-shadow:0 0 40px var(--accent-glow)}
-.track-main{display:flex;align-items:center;gap:1.2rem;padding:1.2rem 1.5rem;cursor:pointer}
-.track-art{width:64px;height:64px;border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0;position:relative}
-.track-art-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;transition:transform .4s var(--ease)}
-.track-card:hover .track-art-inner{transform:scale(1.1)}
-.track-play-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);opacity:0;transition:opacity .3s}
-.track-card:hover .track-play-icon,.track-card.playing .track-play-icon{opacity:1}
-.track-play-icon svg{width:24px;height:24px;fill:white}
-.track-info{flex:1;min-width:0}
-.track-title{font-family:var(--font-display);font-size:1.2rem;margin-bottom:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.track-artist{font-size:.8rem;color:var(--text-secondary);font-weight:300}
-.track-duration{font-family:var(--font-mono);font-size:.75rem;color:var(--text-muted);flex-shrink:0}
-.track-toggle-lyrics{background:none;border:1px solid var(--border);color:var(--text-secondary);padding:6px 14px;border-radius:100px;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;font-family:var(--font-mono);flex-shrink:0;transition:all .3s}
-.track-toggle-lyrics:hover{border-color:var(--accent);color:var(--accent-bright)}
-.track-toggle-lyrics.open{background:var(--accent-glow);border-color:var(--accent);color:var(--accent-bright)}
-.track-lyrics{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
-.track-lyrics.open{max-height:600px}
-.track-lyrics-inner{padding:0 1.5rem 1.5rem;border-top:1px solid var(--border);margin-top:0;padding-top:1.2rem}
-.track-lyrics-inner pre{font-family:var(--font-body);font-size:.88rem;color:var(--text-secondary);line-height:1.9;white-space:pre-wrap;font-weight:300}
-.track-lyrics-inner .lyrics-label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.8rem;display:block}
-
-/* === NOW PLAYING BAR === */
-.player-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(10,10,10,.92);backdrop-filter:blur(24px) saturate(1.8);border-top:1px solid var(--border);transform:translateY(100%);transition:transform .5s var(--ease);height:80px}
-.player-bar.visible{transform:translateY(0)}
-.player-inner{max-width:1200px;margin:0 auto;height:100%;display:flex;align-items:center;gap:1rem;padding:0 1.5rem}
-.player-track-info{display:flex;align-items:center;gap:1rem;min-width:0;flex:1}
-.player-art{width:48px;height:48px;border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0}
-.player-art-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
-.player-details{min-width:0}
-.player-title{font-family:var(--font-display);font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.player-artist{font-size:.72rem;color:var(--text-secondary);font-weight:300}
-.player-controls{display:flex;align-items:center;gap:1rem;flex-shrink:0}
-.player-btn{background:none;border:none;color:var(--text-primary);cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;transition:color .2s,transform .2s}
-.player-btn:hover{color:var(--accent-bright);transform:scale(1.1)}
-.player-btn.play-pause{width:42px;height:42px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center}
-.player-btn.play-pause:hover{background:var(--accent-dim);transform:scale(1.08)}
-.player-btn.play-pause svg{width:18px;height:18px;fill:white}
-.player-progress-wrap{flex:2;display:flex;align-items:center;gap:.8rem;min-width:0}
-.player-time{font-family:var(--font-mono);font-size:.65rem;color:var(--text-muted);flex-shrink:0;width:36px;text-align:center}
-.player-progress{flex:1;height:4px;background:var(--bg-hover);border-radius:2px;cursor:pointer;position:relative;overflow:hidden}
-.player-progress-fill{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width .1s linear;position:relative}
-.player-progress-fill::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:10px;height:10px;border-radius:50%;background:var(--accent-bright);opacity:0;transition:opacity .2s}
-.player-progress:hover .player-progress-fill::after{opacity:1}
-.player-volume{display:flex;align-items:center;gap:.5rem;flex-shrink:0}
-.player-volume svg{width:16px;height:16px;color:var(--text-muted)}
-.player-volume-slider{width:80px;height:4px;background:var(--bg-hover);border-radius:2px;cursor:pointer;position:relative;overflow:hidden}
-.player-volume-fill{height:100%;background:var(--accent-dim);border-radius:2px;width:70%}
+/* === ABOUT / TWO-COL === */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,4rem);align-items:center}
+.two-col-text{max-width:560px}
+.two-col-img{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;background:var(--bg-card)}
+.two-col-img-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2d1b4e,#1a1a2e);padding:2rem}
+.two-col-img-overlay{position:absolute;top:20px;right:-10px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.6rem;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.two-col-img-overlay p{font-family:var(--font-display);font-style:italic;font-size:.95rem;color:var(--text-light);line-height:1.5}
+.stat-row{display:flex;gap:2rem;margin-top:2rem}
+.stat-item .stat-num{font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--accent)}
+.stat-item .stat-label{font-size:.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em}
 
 @media(max-width:768px){
-  .player-progress-wrap{display:none}
-  .player-volume{display:none}
-  .player-bar{height:68px}
+  .two-col{grid-template-columns:1fr;gap:2rem}
+  .two-col-img-overlay{position:relative;top:0;right:0;margin-top:1rem}
 }
 
-/* === ABOUT === */
-.about-content{max-width:700px}
-.about-content h2{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);margin-bottom:1.5rem;line-height:1.1}
-.about-content h2 em{font-style:italic;color:var(--accent-bright)}
-.about-content p{font-size:1rem;color:var(--text-secondary);line-height:1.8;margin-bottom:1.2rem;font-weight:300}
-.about-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1.5rem;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border)}
-.about-stat{text-align:center}
-.about-stat .num{font-family:var(--font-display);font-size:2.5rem;color:var(--accent-bright);display:block}
-.about-stat .label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-top:.3rem}
+/* === BLOG GRID === */
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:1.5rem}
+.blog-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .4s var(--ease);cursor:pointer}
+.blog-card:hover{transform:translateY(-6px);border-color:rgba(240,192,64,.25);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.blog-card-img{width:100%;aspect-ratio:16/10;overflow:hidden;position:relative}
+.blog-card-img-inner{width:100%;height:100%;transition:transform .5s var(--ease);display:flex;align-items:center;justify-content:center;font-size:3rem}
+.blog-card:hover .blog-card-img-inner{transform:scale(1.08)}
+.blog-card-body{padding:1.3rem 1.5rem 1.5rem}
+.blog-card-meta{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.7rem}
+.badge{font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:4px;font-weight:600}
+.badge-cat{background:var(--accent);color:var(--bg-dark)}
+.badge-tag{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(58,134,212,.3)}
+.blog-card-date{font-size:.72rem;color:var(--text-muted);margin-left:auto;font-family:var(--font-mono)}
+.blog-card h3{font-family:var(--font-display);font-size:1.25rem;line-height:1.25;margin-bottom:.5rem;transition:color .3s}
+.blog-card:hover h3{color:var(--accent)}
+.blog-card p{font-size:.85rem;color:var(--text-light);line-height:1.6;font-weight:300}
+.blog-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--border)}
+.blog-card-read{font-size:.75rem;color:var(--accent);font-weight:600;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:.4rem;transition:gap .3s}
+.blog-card:hover .blog-card-read{gap:.7rem}
+.blog-card-time{font-size:.72rem;color:var(--text-muted)}
 
-/* === FOOTER === */
-footer{padding:3rem clamp(1.5rem,4vw,3rem);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
-footer p{font-size:.75rem;color:var(--text-muted);font-family:var(--font-mono)}
-footer .socials{display:flex;gap:1rem}
-footer .socials a{color:var(--text-muted);text-decoration:none;font-size:.8rem;transition:color .3s}
-footer .socials a:hover{color:var(--accent-bright)}
+/* === FILTERS === */
+.filter-bar{display:flex;gap:.5rem;margin-bottom:2rem;flex-wrap:wrap}
+.filter-btn{background:var(--bg-card);border:1px solid var(--border);color:var(--text-light);padding:8px 20px;border-radius:6px;font-size:.8rem;font-weight:500;cursor:pointer;font-family:var(--font-body);transition:all .3s}
+.filter-btn:hover,.filter-btn.active{background:var(--accent);color:var(--bg-dark);border-color:var(--accent);font-weight:600}
 
-/* === ANIMATIONS === */
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-delay-1{transition-delay:.1s}
-.reveal-delay-2{transition-delay:.2s}
-.reveal-delay-3{transition-delay:.3s}
+/* === MUSIC / TRACKS === */
+.tracks-container{max-width:900px;margin:0 auto}
+.track-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem;overflow:hidden;transition:all .4s var(--ease)}
+.track-card:hover{border-color:rgba(240,192,64,.25)}
+.track-card.playing{border-color:var(--accent);box-shadow:0 0 30px var(--accent-dim)}
+.track-main{display:flex;align-items:center;gap:1.2rem;padding:1rem 1.5rem;cursor:pointer}
+.track-num{font-family:var(--font-mono);font-size:.8rem;color:var(--text-muted);width:24px;text-align:center;flex-shrink:0}
+.track-card.playing .track-num{color:var(--accent)}
+.track-art{width:56px;height:56px;border-radius:8px;overflow:hidden;flex-shrink:0;position:relative}
+.track-art-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;transition:transform .3s}
+.track-card:hover .track-art-inner{transform:scale(1.1)}
+.track-play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);opacity:0;transition:opacity .3s;border-radius:8px}
+.track-card:hover .track-play-overlay,.track-card.playing .track-play-overlay{opacity:1}
+.track-play-overlay svg{width:22px;height:22px;fill:var(--accent)}
+.track-info{flex:1;min-width:0}
+.track-title{font-family:var(--font-display);font-size:1.1rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track-artist{font-size:.78rem;color:var(--text-muted);font-weight:300}
+.track-duration{font-family:var(--font-mono);font-size:.75rem;color:var(--text-muted);flex-shrink:0;margin-right:.5rem}
+.lyrics-btn{background:none;border:1px solid var(--border);color:var(--text-muted);padding:6px 16px;border-radius:6px;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:var(--font-body);font-weight:600;flex-shrink:0;transition:all .3s}
+.lyrics-btn:hover{border-color:var(--accent);color:var(--accent)}
+.lyrics-btn.open{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.track-lyrics{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
+.track-lyrics.open{max-height:800px}
+.track-lyrics-inner{padding:0 1.5rem 1.5rem;padding-left:calc(24px + 56px + 1.2rem + 1.5rem)}
+.track-lyrics-inner .lyrics-label{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:.6rem;display:block}
+.track-lyrics-inner pre{font-family:var(--font-body);font-size:.88rem;color:var(--text-light);line-height:1.9;white-space:pre-wrap;font-weight:300}
+
+@media(max-width:768px){
+  .track-lyrics-inner{padding-left:1.5rem}
+  .track-num{display:none}
+}
+
+/* === PLAYER BAR === */
+.player-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(18,18,42,.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);transform:translateY(100%);transition:transform .5s var(--ease);height:76px}
+.player-bar.visible{transform:translateY(0)}
+.player-inner{max-width:1200px;margin:0 auto;height:100%;display:flex;align-items:center;gap:1rem;padding:0 1.5rem}
+.player-track-info{display:flex;align-items:center;gap:.8rem;min-width:0;flex:1}
+.player-art{width:44px;height:44px;border-radius:8px;overflow:hidden;flex-shrink:0}
+.player-art-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.player-details{min-width:0}
+.player-title{font-family:var(--font-display);font-size:.95rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player-artist{font-size:.7rem;color:var(--text-muted);font-weight:300}
+.player-controls{display:flex;align-items:center;gap:.8rem;flex-shrink:0}
+.p-btn{background:none;border:none;color:var(--text-light);cursor:pointer;padding:4px;display:flex;transition:color .2s,transform .2s}
+.p-btn:hover{color:var(--accent);transform:scale(1.1)}
+.p-btn svg{width:18px;height:18px;fill:currentColor}
+.p-btn.play-pause{width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--bg-dark);display:flex;align-items:center;justify-content:center}
+.p-btn.play-pause:hover{background:var(--accent-hover);transform:scale(1.06)}
+.p-btn.play-pause svg{width:18px;height:18px}
+.player-progress-area{flex:2;display:flex;align-items:center;gap:.6rem;min-width:0}
+.player-time{font-family:var(--font-mono);font-size:.65rem;color:var(--text-muted);flex-shrink:0;width:34px;text-align:center}
+.player-progress{flex:1;height:4px;background:rgba(255,255,255,.08);border-radius:2px;cursor:pointer;position:relative}
+.player-progress-fill{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width .1s linear}
+.player-volume{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.player-volume svg{width:16px;height:16px;fill:var(--text-muted)}
+.vol-slider{width:70px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;cursor:pointer;position:relative;overflow:hidden}
+.vol-fill{height:100%;background:var(--accent);border-radius:2px;width:70%}
+
+@media(max-width:768px){
+  .player-progress-area,.player-volume{display:none}
+  .player-bar{height:66px}
+  body{padding-bottom:70px}
+}
+@media(min-width:769px){body{padding-bottom:0}.player-bar.visible~*{padding-bottom:80px}}
 
 /* === BLOG DETAIL MODAL === */
-.blog-modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);overflow-y:auto;padding:2rem}
-.blog-modal-overlay.open{display:flex;justify-content:center;align-items:flex-start}
-.blog-modal{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:750px;width:100%;margin:2rem auto;overflow:hidden;animation:modal-in .4s var(--ease)}
-@keyframes modal-in{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.blog-modal-img{width:100%;aspect-ratio:16/9;object-fit:cover}
-.blog-modal-body{padding:2rem 2.5rem 2.5rem}
-.blog-modal-body h2{font-family:var(--font-display);font-size:2rem;margin-bottom:.8rem;line-height:1.15}
-.blog-modal-body .meta{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.blog-modal-body .content{font-size:.95rem;color:var(--text-secondary);line-height:1.85;font-weight:300}
-.blog-modal-body .content p{margin-bottom:1rem}
-.blog-modal-close{position:sticky;top:1rem;float:right;background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-primary);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;z-index:10;transition:all .3s}
-.blog-modal-close:hover{background:var(--accent);border-color:var(--accent)}
+.modal-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(10,10,25,.85);backdrop-filter:blur(8px);overflow-y:auto;padding:2rem}
+.modal-overlay.open{display:flex;justify-content:center;align-items:flex-start}
+.modal{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;max-width:750px;width:100%;margin:3rem auto;overflow:hidden;animation:modal-in .4s var(--ease)}
+@keyframes modal-in{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:none}}
+.modal-img{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:4rem}
+.modal-body{padding:2rem 2.5rem 2.5rem}
+.modal-body h2{font-family:var(--font-display);font-size:1.8rem;margin-bottom:.7rem;line-height:1.2}
+.modal-body .meta{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.modal-body .content{font-size:.95rem;color:var(--text-light);line-height:1.85;font-weight:300}
+.modal-body .content p{margin-bottom:1rem}
+.modal-close{position:sticky;top:1rem;float:right;background:var(--bg-darker);border:1px solid var(--border);color:var(--text-white);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;z-index:10;transition:all .3s}
+.modal-close:hover{background:var(--accent);color:var(--bg-dark);border-color:var(--accent)}
+
+/* === ABOUT PAGE === */
+.about-content{max-width:700px}
+.about-content p{font-size:1rem;color:var(--text-light);line-height:1.8;margin-bottom:1.2rem;font-weight:300}
+.cta-btn{display:inline-block;background:var(--accent);color:var(--bg-dark);padding:12px 28px;border-radius:6px;font-weight:700;font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;transition:all .3s;border:2px solid var(--accent);margin-top:.5rem}
+.cta-btn:hover{background:transparent;color:var(--accent)}
+
+/* === FOOTER === */
+footer{background:var(--bg-darker);border-top:1px solid var(--border);padding:3rem clamp(1rem,4vw,3rem) 1.5rem}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;margin-bottom:2.5rem}
+.footer-brand{max-width:300px}
+.footer-brand .nav-logo{margin-bottom:.8rem;font-size:1.4rem}
+.footer-brand p{font-size:.85rem;color:var(--text-muted);line-height:1.6}
+.footer-col h4{font-family:var(--font-display);font-size:1rem;margin-bottom:1rem;color:var(--text-white)}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:.5rem}
+.footer-col a{font-size:.85rem;color:var(--text-muted);transition:color .3s}
+.footer-col a:hover{color:var(--accent)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:1.2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-bottom p{font-size:.75rem;color:var(--text-muted)}
+.footer-socials{display:flex;gap:1rem}
+.footer-socials a{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:.75rem;transition:all .3s}
+.footer-socials a:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+
+@media(max-width:768px){
+  .footer-grid{grid-template-columns:1fr 1fr;gap:1.5rem}
+}
+@media(max-width:480px){
+  .footer-grid{grid-template-columns:1fr}
+}
+
+/* === PAGES === */
+.page{display:none;min-height:80vh}
+.page.active{display:block}
+
+/* === REVEAL ANIMATION === */
+.reveal{opacity:0;transform:translateY(25px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.visible{opacity:1;transform:none}
+.reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav id="mainNav">
-  <a href="#" class="nav-logo" onclick="showSection('home');return false">VYNL<span class="dot"></span></a>
-  <div class="nav-links">
-    <a href="#" class="active" data-section="home" onclick="showSection('home');return false">Home</a>
-    <a href="#" data-section="blog" onclick="showSection('blog');return false">Blog</a>
-    <a href="#" data-section="music" onclick="showSection('music');return false">Music</a>
-    <a href="#" data-section="about" onclick="showSection('about');return false">About</a>
+<!-- TOPBAR -->
+<div class="topbar">
+  <span>Your daily dose of music, lyrics & stories</span>
+  <div class="topbar-socials">
+    <a href="#">Facebook</a>
+    <a href="#">Instagram</a>
+    <a href="#">YouTube</a>
+    <a href="#">TikTok</a>
   </div>
-  <button class="mobile-toggle" onclick="document.getElementById('mobileMenu').classList.add('open')" aria-label="Menu">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-  </button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('home');return false">Sound<span>Wave</span></a>
+  <div class="nav-links">
+    <a href="#" class="active" data-page="home" onclick="showPage('home');return false">Home</a>
+    <a href="#" data-page="blog" onclick="showPage('blog');return false">Blog</a>
+    <a href="#" data-page="music" onclick="showPage('music');return false">Music</a>
+    <a href="#" data-page="about" onclick="showPage('about');return false">About Us</a>
+    <a href="#" data-page="contact" onclick="showPage('contact');return false">Contact</a>
+  </div>
+  <button class="mobile-toggle" onclick="document.getElementById('mobMenu').classList.add('open')">&#9776;</button>
 </nav>
 
 <!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
+<div class="mobile-menu" id="mobMenu">
   <button class="mobile-close" onclick="this.parentElement.classList.remove('open')">&times;</button>
-  <a href="#" onclick="showSection('home');document.getElementById('mobileMenu').classList.remove('open');return false">Home</a>
-  <a href="#" onclick="showSection('blog');document.getElementById('mobileMenu').classList.remove('open');return false">Blog</a>
-  <a href="#" onclick="showSection('music');document.getElementById('mobileMenu').classList.remove('open');return false">Music</a>
-  <a href="#" onclick="showSection('about');document.getElementById('mobileMenu').classList.remove('open');return false">About</a>
+  <a href="#" onclick="showPage('home');document.getElementById('mobMenu').classList.remove('open');return false">Home</a>
+  <a href="#" onclick="showPage('blog');document.getElementById('mobMenu').classList.remove('open');return false">Blog</a>
+  <a href="#" onclick="showPage('music');document.getElementById('mobMenu').classList.remove('open');return false">Music</a>
+  <a href="#" onclick="showPage('about');document.getElementById('mobMenu').classList.remove('open');return false">About Us</a>
+  <a href="#" onclick="showPage('contact');document.getElementById('mobMenu').classList.remove('open');return false">Contact</a>
 </div>
 
-<!-- HOME -->
-<div class="page-section active" id="section-home">
+<!-- ====== HOME ====== -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
   <section class="hero">
-    <div class="hero-label">Where words meet waveforms</div>
-    <h1>Stories told<br>through <em>sound</em></h1>
-    <p class="hero-sub">Original tracks, raw lyrics, and the stories behind them. A place where music lives and breathes beyond the algorithm.</p>
-    <div class="hero-scroll"><div class="arrow"></div> Scroll to explore</div>
+    <div class="hero-bg"></div>
+    <div class="hero-visual">
+      <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+      <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+      <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+      <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-tagline">&#8212; Where Music Meets Words &#8212;</div>
+      <h1>We believe music is more than just a <em>sound</em></h1>
+      <p class="hero-desc">It's a story of passion, rhythm, and unforgettable moments. SoundWave is your home for original tracks, raw lyrics, and the stories behind every beat.</p>
+      <a href="#" class="hero-cta" onclick="showPage('blog');return false">Read the Latest Posts</a>
+    </div>
   </section>
 
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title">Latest <em>Posts</em></h2>
-      <a href="#" class="section-link" onclick="showSection('blog');return false">View all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  <!-- WAVE -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path class="wave-accent" d="M0,30 C360,80 720,0 1080,50 C1260,70 1380,20 1440,40 L1440,80 L0,80 Z" opacity=".4"/>
+      <path class="wave-blue" d="M0,50 C360,20 720,70 1080,30 C1260,10 1380,60 1440,40 L1440,80 L0,80 Z" opacity=".3"/>
+      <path class="wave-dark" d="M0,60 C360,40 720,70 1080,50 C1260,40 1380,65 1440,55 L1440,80 L0,80 Z"/>
+    </svg>
+  </div>
+
+  <!-- ABOUT SECTION -->
+  <section class="section section-dark">
+    <div class="two-col">
+      <div class="two-col-text">
+        <div class="section-label">Who We Are</div>
+        <h2 class="section-title">Where Musical Passion Meets Storytelling</h2>
+        <p class="section-desc" style="max-width:none">SoundWave is a music blogging platform created for listeners who live for the sound beyond the stream. We are songwriters, music lovers, and passionate followers of the craft, dedicated to capturing the moments that define every melody.</p>
+        <p class="section-desc" style="max-width:none;margin-top:1rem">From lyric breakdowns to behind-the-scenes studio stories, we bring thoughtful and engaging music content to a global audience.</p>
+        <a href="#" class="cta-btn" onclick="showPage('about');return false">Learn More</a>
+      </div>
+      <div class="two-col-img">
+        <div class="two-col-img-inner" style="font-size:5rem;background:linear-gradient(135deg,#2d1b4e,#1a1a2e)">&#127925;&#127911;&#127926;</div>
+        <div class="two-col-img-overlay">
+          <p>We are committed to delivering music content that true fans care about</p>
+        </div>
+      </div>
     </div>
-    <div class="blog-grid" id="homeBlogGrid"></div>
   </section>
 
+  <!-- WAVE -->
+  <div class="wave-divider wave-divider-reverse" style="background:var(--bg-section)">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path d="M0,30 C480,70 960,10 1440,50 L1440,80 L0,80 Z" fill="var(--bg-dark)"/>
+    </svg>
+  </div>
+
+  <!-- LATEST POSTS -->
   <section class="section">
-    <div class="section-header">
-      <h2 class="section-title">Featured <em>Tracks</em></h2>
-      <a href="#" class="section-link" onclick="showSection('music');return false">All music <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    <div class="section-header section-center">
+      <div class="section-label">Latest Stories</div>
+      <h2 class="section-title">From the Blog</h2>
+      <p class="section-desc">Deep dives, hot takes, and the stories behind the music. Fresh content every week.</p>
     </div>
-    <div class="tracks-grid" id="homeTracksGrid"></div>
+    <div class="blog-grid" id="homeBlog"></div>
   </section>
+
+  <!-- WAVE -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path class="wave-dark" d="M0,40 C480,80 960,0 1440,50 L1440,80 L0,80 Z"/>
+    </svg>
+  </div>
+
+  <!-- FEATURED TRACKS -->
+  <section class="section section-dark">
+    <div class="section-header section-center">
+      <div class="section-label">Our Songs</div>
+      <h2 class="section-title">Featured Tracks</h2>
+      <p class="section-desc">Original music with full lyrics. Click to play, read along, and feel every word.</p>
+    </div>
+    <div class="tracks-container" id="homeTracks"></div>
+  </section>
+
 </div>
 
-<!-- BLOG -->
-<div class="page-section" id="section-blog">
-  <section class="section">
+<!-- ====== BLOG ====== -->
+<div class="page" id="page-blog">
+  <section class="section" style="padding-top:2rem">
     <div class="section-header">
-      <h2 class="section-title">The <em>Blog</em></h2>
+      <div class="section-label">The Blog</div>
+      <h2 class="section-title">All Posts</h2>
     </div>
     <div class="filter-bar" id="filterBar"></div>
     <div class="blog-grid" id="blogGrid"></div>
   </section>
 </div>
 
-<!-- MUSIC -->
-<div class="page-section" id="section-music">
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title">The <em>Music</em></h2>
+<!-- ====== MUSIC ====== -->
+<div class="page" id="page-music">
+  <section class="section" style="padding-top:2rem">
+    <div class="section-header section-center">
+      <div class="section-label">Our Songs</div>
+      <h2 class="section-title">All Tracks</h2>
+      <p class="section-desc">Every track with full lyrics. Click to play and read along.</p>
     </div>
-    <div class="tracks-grid" id="musicGrid"></div>
+    <div class="tracks-container" id="musicGrid"></div>
   </section>
 </div>
 
-<!-- ABOUT -->
-<div class="page-section" id="section-about">
-  <section class="section">
-    <div class="about-content">
-      <h2>The voice behind<br>the <em>vinyl</em></h2>
-      <p>VYNL started as a late-night notebook and a bedroom mic. What began as scattered thoughts and looped melodies turned into something bigger — a space where music and writing collide, where every track has a story and every post has a pulse.</p>
-      <p>This blog is my home base. Here you will find deep dives into the craft, behind-the-scenes breakdowns of my tracks, and honest writing about the sounds that shaped me. No gatekeeping. No algorithms. Just music, words, and the space between them.</p>
-      <p>Every track on this site is original. Every lyric is mine. Hit play, read the words, and if something resonates — stick around.</p>
-      <div class="about-stats">
-        <div class="about-stat"><span class="num">47</span><span class="label">Posts written</span></div>
-        <div class="about-stat"><span class="num">12</span><span class="label">Tracks released</span></div>
-        <div class="about-stat"><span class="num">8.2K</span><span class="label">Monthly readers</span></div>
-        <div class="about-stat"><span class="num">2022</span><span class="label">Since</span></div>
+<!-- ====== ABOUT ====== -->
+<div class="page" id="page-about">
+  <section class="section" style="padding-top:2rem">
+    <div class="two-col">
+      <div class="about-content">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">The Voice Behind the Wave</h2>
+        <p>SoundWave started as a late-night notebook and a bedroom mic. What began as scattered thoughts and looped melodies turned into something bigger — a space where music and writing collide, where every track has a story and every post has a pulse.</p>
+        <p>This blog is my home base. Here you will find deep dives into the craft, behind-the-scenes breakdowns of my tracks, and honest writing about the sounds that shaped me. No gatekeeping. No algorithms. Just music, words, and the space between them.</p>
+        <p>Every track on this site is original. Every lyric is mine. Hit play, read the words, and if something resonates — stick around.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="stat-num">47</div><div class="stat-label">Posts</div></div>
+          <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">Tracks</div></div>
+          <div class="stat-item"><div class="stat-num">8.2K</div><div class="stat-label">Readers</div></div>
+        </div>
+      </div>
+      <div class="two-col-img">
+        <div class="two-col-img-inner" style="font-size:5rem">&#127908;&#127929;&#127927;</div>
       </div>
     </div>
   </section>
 </div>
 
+<!-- ====== CONTACT ====== -->
+<div class="page" id="page-contact">
+  <section class="section" style="padding-top:2rem;max-width:600px;margin:0 auto">
+    <div class="section-header section-center">
+      <div class="section-label">Get in Touch</div>
+      <h2 class="section-title">Contact Us</h2>
+      <p class="section-desc">Got a question, collab idea, or just want to say hi? Drop a message.</p>
+    </div>
+    <form onsubmit="event.preventDefault();alert('Message sent! (demo)');" style="display:flex;flex-direction:column;gap:1rem">
+      <input type="text" placeholder="Your Name" style="padding:14px 18px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-white);font-family:var(--font-body);font-size:.9rem">
+      <input type="email" placeholder="Your Email" style="padding:14px 18px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-white);font-family:var(--font-body);font-size:.9rem">
+      <textarea placeholder="Your Message" rows="5" style="padding:14px 18px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-white);font-family:var(--font-body);font-size:.9rem;resize:vertical"></textarea>
+      <button type="submit" class="cta-btn" style="cursor:pointer;text-align:center">Send Message</button>
+    </form>
+  </section>
+</div>
+
 <!-- BLOG MODAL -->
-<div class="blog-modal-overlay" id="blogModal">
-  <div class="blog-modal">
-    <button class="blog-modal-close" onclick="closeBlogModal()">&times;</button>
-    <img class="blog-modal-img" id="modalImg" src="" alt="">
-    <div class="blog-modal-body">
-      <h2 id="modalTitle"></h2>
-      <div class="meta" id="modalMeta"></div>
-      <div class="content" id="modalContent"></div>
+<div class="modal-overlay" id="blogModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div class="modal-img" id="mImg"></div>
+    <div class="modal-body">
+      <h2 id="mTitle"></h2>
+      <div class="meta" id="mMeta"></div>
+      <div class="content" id="mContent"></div>
     </div>
   </div>
 </div>
@@ -313,433 +464,197 @@ footer .socials a:hover{color:var(--accent-bright)}
 <div class="player-bar" id="playerBar">
   <div class="player-inner">
     <div class="player-track-info">
-      <div class="player-art"><div class="player-art-inner" id="playerArt"></div></div>
+      <div class="player-art"><div class="player-art-inner" id="pArt"></div></div>
       <div class="player-details">
-        <div class="player-title" id="playerTitle">—</div>
-        <div class="player-artist" id="playerArtist">—</div>
+        <div class="player-title" id="pTitle">--</div>
+        <div class="player-artist" id="pArtist">--</div>
       </div>
     </div>
     <div class="player-controls">
-      <button class="player-btn" onclick="prevTrack()" aria-label="Previous">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+      <button class="p-btn" onclick="prevTrack()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+      <button class="p-btn play-pause" id="ppBtn" onclick="togglePlay()">
+        <svg id="icPlay" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg>
+        <svg id="icPause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
       </button>
-      <button class="player-btn play-pause" id="playPauseBtn" onclick="togglePlay()" aria-label="Play/Pause">
-        <svg id="playIcon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-        <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-      </button>
-      <button class="player-btn" onclick="nextTrack()" aria-label="Next">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-      </button>
+      <button class="p-btn" onclick="nextTrack()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
     </div>
-    <div class="player-progress-wrap">
-      <span class="player-time" id="playerCurrent">0:00</span>
-      <div class="player-progress" id="progressBar" onclick="seekTo(event)">
-        <div class="player-progress-fill" id="progressFill"></div>
-      </div>
-      <span class="player-time" id="playerDuration">0:00</span>
+    <div class="player-progress-area">
+      <span class="player-time" id="pCur">0:00</span>
+      <div class="player-progress" id="progBar" onclick="seekTo(event)"><div class="player-progress-fill" id="progFill"></div></div>
+      <span class="player-time" id="pDur">0:00</span>
     </div>
     <div class="player-volume">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-      <div class="player-volume-slider" onclick="setVolume(event)">
-        <div class="player-volume-fill" id="volumeFill"></div>
-      </div>
+      <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      <div class="vol-slider" onclick="setVol(event)"><div class="vol-fill" id="volFill"></div></div>
     </div>
   </div>
 </div>
 
+<!-- FOOTER -->
 <footer>
-  <p>&copy; 2024 VYNL. All rights reserved.</p>
-  <div class="socials">
-    <a href="#">Instagram</a>
-    <a href="#">Twitter</a>
-    <a href="#">SoundCloud</a>
-    <a href="#">Spotify</a>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">Sound<span>Wave</span></div>
+      <p>Your home for original music, raw lyrics, and the stories behind every beat. Built for listeners who feel every word.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Blog</h4>
+      <ul>
+        <li><a href="#">Opinion</a></li>
+        <li><a href="#">Behind the Scenes</a></li>
+        <li><a href="#">Discovery</a></li>
+        <li><a href="#">Craft</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#" onclick="showPage('home');return false">Home</a></li>
+        <li><a href="#" onclick="showPage('music');return false">Music</a></li>
+        <li><a href="#" onclick="showPage('about');return false">About</a></li>
+        <li><a href="#" onclick="showPage('contact');return false">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">hello@soundwave.com</a></li>
+        <li><a href="#">+1 (555) 123-4567</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 SoundWave Blog. All rights reserved.</p>
+    <div class="footer-socials">
+      <a href="#">FB</a><a href="#">IG</a><a href="#">YT</a><a href="#">TK</a>
+    </div>
   </div>
 </footer>
 
-<audio id="audioEl" preload="auto"></audio>
-
 <script>
 // === DATA ===
-const blogPosts = [
-  {
-    id:1, title:"The Death of the Album Format", category:"Opinion", tags:["industry","albums"],
-    date:"Jun 10, 2024", readTime:"6 min",
-    img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500' fill='%230a0a0a'%3E%3Crect width='800' height='500'/%3E%3Ccircle cx='400' cy='250' r='150' fill='%23161616'/%3E%3Ccircle cx='400' cy='250' r='50' fill='%238b5cf6' opacity='.3'/%3E%3Ctext x='400' y='260' fill='%238b5cf6' font-size='20' text-anchor='middle' font-family='serif'%3EVYNL%3C/text%3E%3C/svg%3E",
+const posts = [
+  { id:1, title:"The Death of the Album Format", cat:"Opinion", tags:["industry","albums"], date:"Jun 10, 2024", time:"6 min",
+    bg:"linear-gradient(135deg,#2d1b4e,#1a0a2e)", emoji:"&#128191;",
     excerpt:"Singles dominate streaming, but are we losing something irreplaceable? A look at how the album as an art form is fighting for survival.",
-    content:"<p>There was a time when dropping an album meant something. It was an event — a complete artistic statement that demanded to be heard front to back. The sequencing mattered. The interludes mattered. Track five was always the gut-punch.</p><p>Now we live in a singles economy. Artists release a track, chase the algorithm for two weeks, and move on. The album as a cohesive body of work is becoming a relic, replaced by playlists and mood boards that shuffle away any intentional track order.</p><p>But here is the thing — the best music of the last few years has still come in album form. Kendrick understood it. SZA understood it. The format is not dead, but it is fighting for its life against a system that rewards volume over vision.</p><p>I still write albums. I still think about what track one should feel like versus track eight. Maybe that makes me old-fashioned. Or maybe it just means I still believe in telling a whole story.</p>"
-  },
-  {
-    id:2, title:"Studio Diary: Recording 'Midnight Static'", category:"Behind the Scenes", tags:["studio","process"],
-    date:"Jun 3, 2024", readTime:"8 min",
-    img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500' fill='%230d0d12'%3E%3Crect width='800' height='500'/%3E%3Crect x='200' y='100' width='400' height='300' rx='20' fill='%23161616'/%3E%3Ccircle cx='400' cy='220' r='40' fill='none' stroke='%238b5cf6' stroke-width='2' opacity='.5'/%3E%3Crect x='370' y='280' width='60' height='8' rx='4' fill='%238b5cf6' opacity='.3'/%3E%3Crect x='350' y='300' width='100' height='4' rx='2' fill='%23333'/%3E%3Ctext x='400' y='370' fill='%23555' font-size='14' text-anchor='middle' font-family='monospace'%3EREC%3C/text%3E%3C/svg%3E",
+    content:"<p>There was a time when dropping an album meant something. It was an event — a complete artistic statement that demanded to be heard front to back. The sequencing mattered. The interludes mattered. Track five was always the gut-punch.</p><p>Now we live in a singles economy. Artists release a track, chase the algorithm for two weeks, and move on. The album as a cohesive body of work is becoming a relic, replaced by playlists and mood boards that shuffle away any intentional track order.</p><p>But here is the thing — the best music of the last few years has still come in album form. Kendrick understood it. SZA understood it. The format is not dead, but it is fighting for its life against a system that rewards volume over vision.</p><p>I still write albums. I still think about what track one should feel like versus track eight. Maybe that makes me old-fashioned. Or maybe it just means I still believe in telling a whole story.</p>" },
+  { id:2, title:"Studio Diary: Recording 'Midnight Static'", cat:"Behind the Scenes", tags:["studio","process"], date:"Jun 3, 2024", time:"8 min",
+    bg:"linear-gradient(135deg,#0d1a2e,#1a2a3e)", emoji:"&#127908;",
     excerpt:"Three weeks, one mic, and a cramped room that smelled like coffee. Here is how 'Midnight Static' came together from scratch.",
-    content:"<p>The idea for Midnight Static started at 2 AM on a Tuesday — which honestly is when all my best ideas show up. I had this bass loop running through my headphones and a melody that would not leave me alone.</p><p>I booked three weeks at a friend's home studio. Nothing fancy — a treated room, a Neumann U87, and an old Fender Rhodes that buzzed if you pushed the sustain too hard. That buzz ended up on the final mix. Happy accidents.</p><p>The hardest part was the bridge. I rewrote it eleven times before landing on something that felt honest instead of clever. There is a difference, and the bridge is where most songs lie to you.</p><p>By week three I had the bones. The rest was layering — synth pads, a cello sample I pitched down an octave, and my own breath between verses because the silence felt too clean.</p>"
-  },
-  {
-    id:3, title:"5 Underground Artists You Should Know in 2024", category:"Discovery", tags:["underground","recommendations"],
-    date:"May 28, 2024", readTime:"5 min",
-    img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500' fill='%230a0a0a'%3E%3Crect width='800' height='500'/%3E%3Cg opacity='.15'%3E%3Ccircle cx='200' cy='250' r='80' fill='%238b5cf6'/%3E%3Ccircle cx='350' cy='200' r='60' fill='%236d3fd4'/%3E%3Ccircle cx='500' cy='280' r='90' fill='%238b5cf6'/%3E%3Ccircle cx='650' cy='220' r='70' fill='%236d3fd4'/%3E%3C/g%3E%3Ctext x='400' y='260' fill='%23f0eded' font-size='48' text-anchor='middle' font-family='serif'%3E5%3C/text%3E%3C/svg%3E",
+    content:"<p>The idea for Midnight Static started at 2 AM on a Tuesday — which honestly is when all my best ideas show up. I had this bass loop running through my headphones and a melody that would not leave me alone.</p><p>I booked three weeks at a friend's home studio. Nothing fancy — a treated room, a Neumann U87, and an old Fender Rhodes that buzzed if you pushed the sustain too hard. That buzz ended up on the final mix. Happy accidents.</p><p>The hardest part was the bridge. I rewrote it eleven times before landing on something that felt honest instead of clever. There is a difference, and the bridge is where most songs lie to you.</p><p>By week three I had the bones. The rest was layering — synth pads, a cello sample I pitched down an octave, and my own breath between verses because the silence felt too clean.</p>" },
+  { id:3, title:"5 Underground Artists You Should Know in 2024", cat:"Discovery", tags:["underground","picks"], date:"May 28, 2024", time:"5 min",
+    bg:"linear-gradient(135deg,#1a2e1a,#0d2a1a)", emoji:"&#128293;",
     excerpt:"Forget the trending page. These five artists are making some of the most exciting music right now — and barely anyone is talking about them.",
-    content:"<p>The best music rarely trends. It lives in bedroom studios, SoundCloud deep cuts, and Bandcamp pages with twelve followers. Here are five artists I have been obsessing over this year.</p><p>First up: Nola Veil. She makes ambient R&B that sounds like it was recorded inside a cathedral at midnight. Her EP 'Soft Collapse' is only four tracks but each one is a world.</p><p>Then there is JXCK — a producer out of Manchester making glitchy, soulful beats that sit somewhere between Burial and Frank Ocean. No vocals needed. The instrumentals tell the whole story.</p><p>I also can not stop listening to Mara Solis, who blends traditional folk melodies with heavy 808s in a way that should not work but absolutely does. Her track 'Río' is one of the best songs I have heard this year — in any genre.</p><p>Do yourself a favor: close Spotify's Discover Weekly and go find these people. Your ears will thank you.</p>"
-  },
-  {
-    id:4, title:"Why I Write Lyrics Before Melodies", category:"Craft", tags:["writing","process"],
-    date:"May 20, 2024", readTime:"4 min",
-    img:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500' fill='%230a0a0a'%3E%3Crect width='800' height='500'/%3E%3Cg fill='%23222' font-family='serif' font-size='14'%3E%3Ctext x='100' y='120'%3Ethe silence after the last note%3C/text%3E%3Ctext x='150' y='180'%3Eis where the meaning lives%3C/text%3E%3Ctext x='80' y='240' fill='%238b5cf6' opacity='.5'%3Eand I keep coming back%3C/text%3E%3Ctext x='200' y='300'%3Eto that empty space%3C/text%3E%3Ctext x='120' y='360'%3Ewhere words used to be%3C/text%3E%3C/g%3E%3C/svg%3E",
+    content:"<p>The best music rarely trends. It lives in bedroom studios, SoundCloud deep cuts, and Bandcamp pages with twelve followers. Here are five artists I have been obsessing over this year.</p><p>First up: Nola Veil. She makes ambient R&B that sounds like it was recorded inside a cathedral at midnight. Her EP 'Soft Collapse' is only four tracks but each one is a world.</p><p>Then there is JXCK — a producer out of Manchester making glitchy, soulful beats that sit somewhere between Burial and Frank Ocean. No vocals needed. The instrumentals tell the whole story.</p><p>Do yourself a favor: close Spotify's Discover Weekly and go find these people. Your ears will thank you.</p>" },
+  { id:4, title:"Why I Write Lyrics Before Melodies", cat:"Craft", tags:["writing","process"], date:"May 20, 2024", time:"4 min",
+    bg:"linear-gradient(135deg,#2e1a1a,#3e1a2a)", emoji:"&#9997;&#65039;",
     excerpt:"Most songwriters start with a chord progression. I start with a pen and paper. Here is why the words always come first for me.",
-    content:"<p>I know it is unconventional. Most producers start with a beat, most singer-songwriters start with a chord progression or a melody hummed into a voice memo. I start with a notebook.</p><p>For me, the words carry the weight. A melody can make you feel something vague — sadness, joy, tension. But the lyrics tell you exactly why. And when the words are right, the melody almost writes itself. It bends around the syllables, rises where the emotion rises, drops where the story needs breath.</p><p>I write lyrics the way some people journal. Stream of consciousness, usually late at night, usually after something has cracked open inside me that I need to name before it closes again.</p><p>Not every lyric becomes a song. Most of them stay in the notebook. But the ones that survive — those are the ones that demanded a melody. And those are always the strongest tracks.</p>"
-  }
+    content:"<p>I know it is unconventional. Most producers start with a beat, most singer-songwriters start with a chord progression or a melody hummed into a voice memo. I start with a notebook.</p><p>For me, the words carry the weight. A melody can make you feel something vague — sadness, joy, tension. But the lyrics tell you exactly why. And when the words are right, the melody almost writes itself.</p><p>Not every lyric becomes a song. Most of them stay in the notebook. But the ones that survive — those are the ones that demanded a melody. And those are always the strongest tracks.</p>" }
 ];
 
 const tracks = [
-  {
-    id:1, title:"Midnight Static", artist:"VYNL", duration:"4:23",
-    color:"#1a1028", emoji:"🌙",
-    lyrics:`I can hear the city breathing through the walls
-Static on the line, but I still take the call
-Every word you said is looping in my head
-Like a song I can't forget, like a book I never read
-
-[Chorus]
-Midnight static, fill the space between
-All the things we said and what we really mean
-Midnight static, drown the silence out
-I don't need the answers, I just need the sound
-
-The neon flickers twice, I take it as a sign
-That nothing's ever broken if you read between the lines
-Your voice is getting distant but the frequency remains
-Like thunder after lightning — the echo and the rain
-
-[Chorus]
-Midnight static, fill the space between
-All the things we said and what we really mean
-Midnight static, drown the silence out
-I don't need the answers, I just need the sound
-
-[Bridge]
-And in the quiet after,
-when the waveform flatlines —
-that's where I find you,
-between the beats, between the signs`
-  },
-  {
-    id:2, title:"Concrete Garden", artist:"VYNL", duration:"3:47",
-    color:"#0d1a0d", emoji:"🌿",
-    lyrics:`Seeds in the sidewalk cracks, reaching for the grey
-Something always grows where they say nothing can stay
-You planted words like wildflowers in a place that only knew stone
-And I watched the concrete garden bloom when I thought I was alone
-
-[Chorus]
-We're a concrete garden, growing where we shouldn't be
-Roots through the pavement, wild and free
-They said this ground was barren, nothing here would last
-But look at what we've built from broken glass
-
-The rain comes down like static, washing clean the dust
-Every drop a promise that we didn't know to trust
-You said "just give it time" when I wanted to tear it down
-Now I see the forest where there used to be a town
-
-[Chorus]
-We're a concrete garden, growing where we shouldn't be
-Roots through the pavement, wild and free
-
-[Outro]
-And if the city takes it back —
-the concrete, the noise, the grey —
-at least we know that something real
-grew here for a day`
-  },
-  {
-    id:3, title:"Paper Planes & Parking Lots", artist:"VYNL", duration:"5:01",
-    color:"#1a1418", emoji:"✈️",
-    lyrics:`We used to fold our futures into paper planes
-Launch them from the roof and never check where they came down
-The parking lot was our cathedral, shopping carts our pews
-Singing hymns to broken streetlights in our worn-out shoes
-
-[Chorus]
-Paper planes and parking lots
-That's all we had, that's all we got
-But God it felt like everything
-When you were here and I could sing
-
-Now the lot's a high-rise and the roof got fenced in
-The kids who fly their planes here will never know where we've been
-But somewhere in the concrete there's a folded wing or two
-A paper plane that never landed — still looking for the view
-
-[Chorus]
-Paper planes and parking lots
-That's all we had, that's all we got
-But God it felt like everything
-When you were here and I could sing
-
-[Bridge]
-Maybe we were never meant to fly that far
-Maybe the beauty was in standing where we are
-Watching something fragile catch the wind
-And believing it could make it to the end`
-  },
-  {
-    id:4, title:"Low Frequency", artist:"VYNL", duration:"3:55",
-    color:"#18101a", emoji:"🔊",
-    lyrics:`Below the bass, below the beat
-There's a frequency only lonely people meet
-It hums beneath the floorboards late at night
-A sound too low to hear but too heavy to fight
-
-[Chorus]
-Low frequency — it rattles in my chest
-Low frequency — I feel it when I rest
-You can't tune it out, you can't turn it down
-It's the sound of everything I've never said out loud
-
-I tried to write it out, I tried to sing it clean
-But some sounds only exist in the space between
-The kick drum and the silence, the inhale and the drop
-A vibration in my bones that doesn't know how to stop
-
-[Chorus]
-Low frequency — it rattles in my chest
-Low frequency — I feel it when I rest
-
-[Outro]
-And when the music stops
-and the room goes still —
-that low frequency remains,
-and I think it always will`
-  }
+  { id:1, title:"Midnight Static", artist:"SoundWave", dur:"4:23", bg:"linear-gradient(135deg,#1a1028,#2d1b4e)", emoji:"&#127769;",
+    lyrics:"I can hear the city breathing through the walls\nStatic on the line, but I still take the call\nEvery word you said is looping in my head\nLike a song I can't forget, like a book I never read\n\n[Chorus]\nMidnight static, fill the space between\nAll the things we said and what we really mean\nMidnight static, drown the silence out\nI don't need the answers, I just need the sound\n\nThe neon flickers twice, I take it as a sign\nThat nothing's ever broken if you read between the lines\nYour voice is getting distant but the frequency remains\nLike thunder after lightning — the echo and the rain\n\n[Chorus]\nMidnight static, fill the space between\nAll the things we said and what we really mean\n\n[Bridge]\nAnd in the quiet after,\nwhen the waveform flatlines —\nthat's where I find you,\nbetween the beats, between the signs" },
+  { id:2, title:"Concrete Garden", artist:"SoundWave", dur:"3:47", bg:"linear-gradient(135deg,#0d1a0d,#1a2e1a)", emoji:"&#127807;",
+    lyrics:"Seeds in the sidewalk cracks, reaching for the grey\nSomething always grows where they say nothing can stay\nYou planted words like wildflowers in a place that only knew stone\nAnd I watched the concrete garden bloom when I thought I was alone\n\n[Chorus]\nWe're a concrete garden, growing where we shouldn't be\nRoots through the pavement, wild and free\nThey said this ground was barren, nothing here would last\nBut look at what we've built from broken glass\n\nThe rain comes down like static, washing clean the dust\nEvery drop a promise that we didn't know to trust\n\n[Outro]\nAnd if the city takes it back —\nthe concrete, the noise, the grey —\nat least we know that something real\ngrew here for a day" },
+  { id:3, title:"Paper Planes & Parking Lots", artist:"SoundWave", dur:"5:01", bg:"linear-gradient(135deg,#1a1418,#2e1a28)", emoji:"&#9992;&#65039;",
+    lyrics:"We used to fold our futures into paper planes\nLaunch them from the roof and never check where they came down\nThe parking lot was our cathedral, shopping carts our pews\nSinging hymns to broken streetlights in our worn-out shoes\n\n[Chorus]\nPaper planes and parking lots\nThat's all we had, that's all we got\nBut God it felt like everything\nWhen you were here and I could sing\n\nNow the lot's a high-rise and the roof got fenced in\nThe kids who fly their planes here will never know where we've been\n\n[Bridge]\nMaybe we were never meant to fly that far\nMaybe the beauty was in standing where we are\nWatching something fragile catch the wind\nAnd believing it could make it to the end" },
+  { id:4, title:"Low Frequency", artist:"SoundWave", dur:"3:55", bg:"linear-gradient(135deg,#18101a,#2a1a3a)", emoji:"&#128266;",
+    lyrics:"Below the bass, below the beat\nThere's a frequency only lonely people meet\nIt hums beneath the floorboards late at night\nA sound too low to hear but too heavy to fight\n\n[Chorus]\nLow frequency — it rattles in my chest\nLow frequency — I feel it when I rest\nYou can't tune it out, you can't turn it down\nIt's the sound of everything I've never said out loud\n\n[Outro]\nAnd when the music stops\nand the room goes still —\nthat low frequency remains,\nand I think it always will" }
 ];
 
-// === AUDIO CONTEXT (simulated) ===
-let currentTrackIndex = -1;
-let isPlaying = false;
-let simulatedTime = 0;
-let simulatedDuration = 0;
-let simInterval = null;
+// === PLAYER STATE ===
+let curTrack=-1, playing=false, simTime=0, simDur=0, simInt=null;
+function parseDur(s){const[m,sec]=s.split(':').map(Number);return m*60+sec}
+function fmtTime(s){return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0')}
 
-const audioEl = document.getElementById('audioEl');
-
-function parseDuration(str) {
-  const [m, s] = str.split(':').map(Number);
-  return m * 60 + s;
-}
-
-function formatTime(sec) {
-  const m = Math.floor(sec / 60);
-  const s = Math.floor(sec % 60);
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
-
-function playTrack(index) {
-  if (currentTrackIndex === index && isPlaying) {
-    pauseTrack();
-    return;
-  }
-  currentTrackIndex = index;
-  const track = tracks[index];
-  simulatedDuration = parseDuration(track.duration);
-  if (currentTrackIndex !== index || simulatedTime >= simulatedDuration) simulatedTime = 0;
-  simulatedTime = 0;
-  isPlaying = true;
-
+function playTrack(i){
+  if(curTrack===i&&playing){pauseTrack();return}
+  curTrack=i; const t=tracks[i]; simDur=parseDur(t.dur); simTime=0; playing=true;
   document.getElementById('playerBar').classList.add('visible');
-  document.getElementById('playerTitle').textContent = track.title;
-  document.getElementById('playerArtist').textContent = track.artist;
-  document.getElementById('playerArt').textContent = track.emoji;
-  document.getElementById('playerArt').style.background = track.color;
-  document.getElementById('playerDuration').textContent = track.duration;
-  document.getElementById('playIcon').style.display = 'none';
-  document.getElementById('pauseIcon').style.display = 'block';
-
-  document.querySelectorAll('.track-card').forEach((c, i) => {
-    c.classList.toggle('playing', i === index);
-  });
-
-  clearInterval(simInterval);
-  simInterval = setInterval(() => {
-    if (!isPlaying) return;
-    simulatedTime += 0.5;
-    if (simulatedTime >= simulatedDuration) {
-      nextTrack();
-      return;
-    }
-    const pct = (simulatedTime / simulatedDuration) * 100;
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('playerCurrent').textContent = formatTime(simulatedTime);
-  }, 500);
+  document.getElementById('pTitle').textContent=t.title;
+  document.getElementById('pArtist').textContent=t.artist;
+  document.getElementById('pArt').innerHTML=t.emoji;
+  document.getElementById('pArt').style.background=t.bg;
+  document.getElementById('pDur').textContent=t.dur;
+  document.getElementById('icPlay').style.display='none';
+  document.getElementById('icPause').style.display='block';
+  document.querySelectorAll('.track-card').forEach((c,idx)=>c.classList.toggle('playing',idx===i));
+  clearInterval(simInt);
+  simInt=setInterval(()=>{
+    if(!playing)return; simTime+=.5;
+    if(simTime>=simDur){nextTrack();return}
+    document.getElementById('progFill').style.width=(simTime/simDur*100)+'%';
+    document.getElementById('pCur').textContent=fmtTime(simTime);
+  },500);
 }
+function pauseTrack(){playing=false;document.getElementById('icPlay').style.display='block';document.getElementById('icPause').style.display='none';document.querySelectorAll('.track-card').forEach(c=>c.classList.remove('playing'))}
+function togglePlay(){if(curTrack<0){playTrack(0);return}if(playing)pauseTrack();else{playing=true;document.getElementById('icPlay').style.display='none';document.getElementById('icPause').style.display='block';document.querySelectorAll('.track-card')[curTrack]?.classList.add('playing')}}
+function nextTrack(){playTrack((curTrack+1)%tracks.length)}
+function prevTrack(){playTrack((curTrack-1+tracks.length)%tracks.length)}
+function seekTo(e){const r=e.currentTarget.getBoundingClientRect();simTime=(e.clientX-r.left)/r.width*simDur}
+function setVol(e){const r=e.currentTarget.getBoundingClientRect();document.getElementById('volFill').style.width=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100))+'%'}
 
-function pauseTrack() {
-  isPlaying = false;
-  document.getElementById('playIcon').style.display = 'block';
-  document.getElementById('pauseIcon').style.display = 'none';
-  document.querySelectorAll('.track-card').forEach(c => c.classList.remove('playing'));
-}
+// === RENDER ===
+function blogCard(p){
+  return `<article class="blog-card reveal" onclick="openModal(${p.id})">
+    <div class="blog-card-img"><div class="blog-card-img-inner" style="background:${p.bg}">${p.emoji}</div></div>
+    <div class="blog-card-body">
+      <div class="blog-card-meta"><span class="badge badge-cat">${p.cat}</span>${p.tags.map(t=>`<span class="badge badge-tag">${t}</span>`).join('')}<span class="blog-card-date">${p.date}</span></div>
+      <h3>${p.title}</h3><p>${p.excerpt}</p>
+      <div class="blog-card-footer"><span class="blog-card-read">Read More &rarr;</span><span class="blog-card-time">${p.time} read</span></div>
+    </div></article>`}
 
-function togglePlay() {
-  if (currentTrackIndex < 0) { playTrack(0); return; }
-  if (isPlaying) pauseTrack(); else {
-    isPlaying = true;
-    document.getElementById('playIcon').style.display = 'none';
-    document.getElementById('pauseIcon').style.display = 'block';
-    document.querySelectorAll('.track-card')[currentTrackIndex]?.classList.add('playing');
-  }
-}
+function trackCard(t,i){
+  return `<div class="track-card reveal" data-i="${i}">
+    <div class="track-main" onclick="playTrack(${i})">
+      <div class="track-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="track-art"><div class="track-art-inner" style="background:${t.bg}">${t.emoji}</div>
+        <div class="track-play-overlay"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div>
+      <div class="track-info"><div class="track-title">${t.title}</div><div class="track-artist">${t.artist}</div></div>
+      <span class="track-duration">${t.dur}</span>
+      <button class="lyrics-btn" onclick="event.stopPropagation();togLyrics(this,${i})">Lyrics</button>
+    </div>
+    <div class="track-lyrics" id="ly-${i}"><div class="track-lyrics-inner"><span class="lyrics-label">Lyrics</span><pre>${t.lyrics}</pre></div></div></div>`}
 
-function nextTrack() {
-  const next = (currentTrackIndex + 1) % tracks.length;
-  playTrack(next);
-}
+function togLyrics(btn,i){const el=document.getElementById('ly-'+i);const o=el.classList.toggle('open');btn.classList.toggle('open',o);btn.textContent=o?'Hide':'Lyrics'}
 
-function prevTrack() {
-  const prev = (currentTrackIndex - 1 + tracks.length) % tracks.length;
-  playTrack(prev);
-}
+// === MODAL ===
+function openModal(id){const p=posts.find(x=>x.id===id);if(!p)return;
+  document.getElementById('mImg').innerHTML=p.emoji;document.getElementById('mImg').style.background=p.bg;
+  document.getElementById('mTitle').textContent=p.title;
+  document.getElementById('mMeta').innerHTML=`<span class="badge badge-cat">${p.cat}</span>${p.tags.map(t=>`<span class="badge badge-tag">${t}</span>`).join('')}<span class="blog-card-date">${p.date} &middot; ${p.time} read</span>`;
+  document.getElementById('mContent').innerHTML=p.content;
+  document.getElementById('blogModal').classList.add('open');document.body.style.overflow='hidden'}
+function closeModal(){document.getElementById('blogModal').classList.remove('open');document.body.style.overflow=''}
+document.getElementById('blogModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
 
-function seekTo(e) {
-  const rect = e.currentTarget.getBoundingClientRect();
-  const pct = (e.clientX - rect.left) / rect.width;
-  simulatedTime = pct * simulatedDuration;
-}
-
-function setVolume(e) {
-  const rect = e.currentTarget.getBoundingClientRect();
-  const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-  document.getElementById('volumeFill').style.width = (pct * 100) + '%';
-}
-
-// === RENDER BLOG CARDS ===
-function renderBlogCard(post) {
-  return `
-    <article class="blog-card reveal" onclick="openBlogModal(${post.id})">
-      <div class="blog-card-img-wrap">
-        <img class="blog-card-img" src="${post.img}" alt="${post.title}" loading="lazy">
-      </div>
-      <div class="blog-card-body">
-        <div class="blog-card-meta">
-          <span class="blog-tag cat">${post.category}</span>
-          ${post.tags.map(t => `<span class="blog-tag tag">${t}</span>`).join('')}
-          <span class="blog-card-date">${post.date}</span>
-        </div>
-        <h3>${post.title}</h3>
-        <p>${post.excerpt}</p>
-        <span class="blog-card-read">${post.readTime} read <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-      </div>
-    </article>`;
-}
-
-function renderTrackCard(track, index) {
-  return `
-    <div class="track-card reveal" data-index="${index}">
-      <div class="track-main" onclick="playTrack(${index})">
-        <div class="track-art">
-          <div class="track-art-inner" style="background:${track.color}">${track.emoji}</div>
-          <div class="track-play-icon">
-            <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
-          </div>
-        </div>
-        <div class="track-info">
-          <div class="track-title">${track.title}</div>
-          <div class="track-artist">${track.artist}</div>
-        </div>
-        <span class="track-duration">${track.duration}</span>
-        <button class="track-toggle-lyrics" onclick="event.stopPropagation();toggleLyrics(this, ${index})">Lyrics</button>
-      </div>
-      <div class="track-lyrics" id="lyrics-${index}">
-        <div class="track-lyrics-inner">
-          <span class="lyrics-label">Lyrics</span>
-          <pre>${track.lyrics}</pre>
-        </div>
-      </div>
-    </div>`;
-}
-
-// === BLOG MODAL ===
-function openBlogModal(id) {
-  const post = blogPosts.find(p => p.id === id);
-  if (!post) return;
-  document.getElementById('modalImg').src = post.img;
-  document.getElementById('modalTitle').textContent = post.title;
-  document.getElementById('modalMeta').innerHTML = `
-    <span class="blog-tag cat">${post.category}</span>
-    ${post.tags.map(t => `<span class="blog-tag tag">${t}</span>`).join('')}
-    <span class="blog-card-date">${post.date} &middot; ${post.readTime} read</span>`;
-  document.getElementById('modalContent').innerHTML = post.content;
-  document.getElementById('blogModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeBlogModal() {
-  document.getElementById('blogModal').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-document.getElementById('blogModal').addEventListener('click', function(e) {
-  if (e.target === this) closeBlogModal();
-});
-
-// === LYRICS TOGGLE ===
-function toggleLyrics(btn, index) {
-  const el = document.getElementById(`lyrics-${index}`);
-  const isOpen = el.classList.toggle('open');
-  btn.classList.toggle('open', isOpen);
-  btn.textContent = isOpen ? 'Hide' : 'Lyrics';
-}
-
-// === FILTERS ===
-let activeFilter = 'All';
-function buildFilters() {
-  const cats = ['All', ...new Set(blogPosts.map(p => p.category))];
-  document.getElementById('filterBar').innerHTML = cats.map(c =>
-    `<button class="filter-btn${c === activeFilter ? ' active' : ''}" onclick="filterPosts('${c}')">${c}</button>`
-  ).join('');
-}
-
-function filterPosts(cat) {
-  activeFilter = cat;
-  buildFilters();
-  const filtered = cat === 'All' ? blogPosts : blogPosts.filter(p => p.category === cat);
-  document.getElementById('blogGrid').innerHTML = filtered.map(renderBlogCard).join('');
-  observeReveals();
-}
+// === FILTER ===
+let activeF='All';
+function buildFilters(){const cats=['All',...new Set(posts.map(p=>p.cat))];
+  document.getElementById('filterBar').innerHTML=cats.map(c=>`<button class="filter-btn${c===activeF?' active':''}" onclick="filterPosts('${c}')">${c}</button>`).join('')}
+function filterPosts(c){activeF=c;buildFilters();const f=c==='All'?posts:posts.filter(p=>p.cat===c);
+  document.getElementById('blogGrid').innerHTML=f.map(blogCard).join('');obsReveal()}
 
 // === NAV ===
-function showSection(name) {
-  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-  document.getElementById(`section-${name}`).classList.add('active');
-  document.querySelectorAll('.nav-links a').forEach(a => {
-    a.classList.toggle('active', a.dataset.section === name);
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (name === 'blog') { buildFilters(); filterPosts(activeFilter); }
-  if (name === 'music') {
-    document.getElementById('musicGrid').innerHTML = tracks.map(renderTrackCard).join('');
-    observeReveals();
-  }
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.dataset.page===name));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='blog'){buildFilters();filterPosts(activeF)}
+  if(name==='music'){document.getElementById('musicGrid').innerHTML=tracks.map(trackCard).join('');obsReveal()}
 }
 
-// === SCROLL NAV ===
-window.addEventListener('scroll', () => {
-  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 30);
-});
-
-// === REVEAL ON SCROLL ===
-function observeReveals() {
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal:not(.visible)').forEach(el => obs.observe(el));
-}
+// === SCROLL REVEAL ===
+function obsReveal(){
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.1});
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el))}
 
 // === INIT ===
-document.getElementById('homeBlogGrid').innerHTML = blogPosts.slice(0, 3).map(renderBlogCard).join('');
-document.getElementById('homeTracksGrid').innerHTML = tracks.slice(0, 3).map(renderTrackCard).join('');
-observeReveals();
+document.getElementById('homeBlog').innerHTML=posts.slice(0,3).map(blogCard).join('');
+document.getElementById('homeTracks').innerHTML=tracks.slice(0,3).map(trackCard).join('');
+obsReveal();
 </script>
 </body>
 </html>
